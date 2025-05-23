@@ -1,0 +1,45 @@
+<style>
+    * {
+        box-sizing: border-box;
+        user-select: none;
+    }
+    body {
+        margin: 0px;
+        padding: 0px;
+        overflow: hidden;
+        background: transparent;
+        background-color:black;
+    }
+</style>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+    <div style="position: absolute; display: flex; justify-content: center; align-items: center">
+        <div id="watch-frame" style="position: absolute; display: flex; justify-content: center; align-items: center; overflow: hidden"></div>
+    </div>
+    <div style="position: absolute; top: 12px; pointer-events: none;">
+        <img id="watch-logo" src="assets/images/360 logo.webp"/>
+    </div>
+</div>
+<script>
+    let onWindowResize = (d) => {
+        d.e = document.getElementById("watch-frame");
+        d.e.style.width = "100vw";
+        d.e.style.height = "100vh";
+        d.o = d.e.getElementsByTagName("object")[0]
+        d.o.contentWindow.postMessage({
+            action: 'resized',
+        });
+        d.e = document.getElementById("watch-logo");
+        d.e.style.height = `${window.matchMedia("(any-hover: none)").matches ? "4.2" : "2.4"}v${(window.innerWidth > window.innerHeight ? "w" : "h")}`;
+    },
+    iframe = document.createElement("object");
+    iframe.data = "interface.html?t=" + new Date().valueOf();
+    iframe.style.position = "absolute";
+    iframe.style.width = "100vw";
+    iframe.style.height = "100vh";
+    document.getElementById("watch-frame").appendChild(iframe);
+    window.addEventListener("resize", () => {
+        onWindowResize({});
+    });
+    onWindowResize({});
+</script>
