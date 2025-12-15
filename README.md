@@ -1,58 +1,65 @@
-# Wrist-AR
+# ⌚ Wrist-AR
 
-Wrist Augmented Reality tracking using tensorflow
+**Wrist Augmented Reality tracking using TensorFlow**
 
-![bca332548618](https://github.com/user-attachments/assets/8da5dbab-4028-4d9d-b897-3059d7087f16)
+This project demonstrates real-time wrist tracking and AR watch visualization directly in the browser.
 
-![b5d8ca61-0373-4a87-bd92-144f4192de9d](https://github.com/user-attachments/assets/d88bfd71-0753-448e-9467-649643992106)
+## 📸 Preview
 
-Demo with markers and helpers: https://theneoverse.web.app/#threeviewer&&watch
+![Wrist AR Preview 1](https://github.com/user-attachments/assets/8da5dbab-4028-4d9d-b897-3059d7087f16)
 
-Live demos:
-Air King
-https://theneoverse.web.app/#wrist-demo&&air_king
+![Wrist AR Preview 2](https://github.com/user-attachments/assets/d88bfd71-0753-448e-9467-649643992106)
 
-Datejust
-https://theneoverse.web.app/#wrist-demo&&datejust
+## 🧪 Demo (Markers & Helpers)
 
-Day-Date
-https://theneoverse.web.app/#wrist-demo&&daydate
+https://theneoverse.web.app/#threeviewer&&watch
 
-Daytona
-https://theneoverse.web.app/#wrist-demo&&daytona
+## 🚀 Live Wrist Demos
 
-Deepsea
-https://theneoverse.web.app/#wrist-demo&&deepsea
+- **Air-King**  
+  https://theneoverse.web.app/#wrist-demo&&air_king
 
-Explorer
-https://theneoverse.web.app/#wrist-demo&&explorer
+- **Datejust**  
+  https://theneoverse.web.app/#wrist-demo&&datejust
 
-Explorer II
-https://theneoverse.web.app/#wrist-demo&&explorer_II
+- **Day-Date**  
+  https://theneoverse.web.app/#wrist-demo&&daydate
 
-GMT-Master II
-https://theneoverse.web.app/#wrist-demo&&GMT_master_II
+- **Daytona**  
+  https://theneoverse.web.app/#wrist-demo&&daytona
 
-Lady-Datejust
-https://theneoverse.web.app/#wrist-demo&&lady_datejust
+- **Deepsea**  
+  https://theneoverse.web.app/#wrist-demo&&deepsea
 
-Perpetual Oyster
-https://theneoverse.web.app/#wrist-demo&&perpetual_oyster
+- **Explorer**  
+  https://theneoverse.web.app/#wrist-demo&&explorer
 
-Perpetual 1908
-https://theneoverse.web.app/#wrist-demo&&perpetual-1908
+- **Explorer II**  
+  https://theneoverse.web.app/#wrist-demo&&explorer_II
 
-Sea-Dweller
-https://theneoverse.web.app/#wrist-demo&&sea_dweller
+- **GMT-Master II**  
+  https://theneoverse.web.app/#wrist-demo&&GMT_master_II
 
-Sky-Dweller
-https://theneoverse.web.app/#wrist-demo&&sky_dweller
+- **Lady-Datejust**  
+  https://theneoverse.web.app/#wrist-demo&&lady_datejust
 
-Submariner
-https://theneoverse.web.app/#wrist-demo&&submariner
+- **Perpetual Oyster**  
+  https://theneoverse.web.app/#wrist-demo&&perpetual_oyster
 
-Submariner Date
-https://theneoverse.web.app/#wrist-demo&&submariner_date
+- **Perpetual 1908**  
+  https://theneoverse.web.app/#wrist-demo&&perpetual-1908
 
-Yacht-Master
-https://theneoverse.web.app/#wrist-demo&&yachtmaster
+- **Sea-Dweller**  
+  https://theneoverse.web.app/#wrist-demo&&sea_dweller
+
+- **Sky-Dweller**  
+  https://theneoverse.web.app/#wrist-demo&&sky_dweller
+
+- **Submariner**  
+  https://theneoverse.web.app/#wrist-demo&&submariner
+
+- **Submariner Date**  
+  https://theneoverse.web.app/#wrist-demo&&submariner_date
+
+- **Yacht-Master**  
+  https://theneoverse.web.app/#wrist-demo&&yachtmaster
