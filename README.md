@@ -7,7 +7,7 @@
   </p>
 </p>
 
----
+<img width="1536" height="1024" alt="Wrist-AR" src="https://github.com/user-attachments/assets/f5138b34-97db-4988-89dc-263eb4d83d05" />
 
 ## 🌌 Overview
 
