@@ -1,0 +1,30 @@
+<script type="module">
+    let windowEvent = async(e) => {
+        if (e.type.match(/(message)/)) {
+            try {
+                if (e.data.action && e.data.action.match(/(home-page)/))
+                    for (let i in x.o) {
+                        if (e.data[i])
+                            x.o[i].src = atob(e.data[i]);
+                        x.o[i].addEventListener("load", () => window.parent.postMessage({ action: "home-page" }) );
+                        document.body.appendChild(x.o[i]);
+                    }
+                if (e.data.type && e.data.type.match(/(svg-path)/)) {
+                    const { hash47, hash52, hash53, hash57, hash64 } = await import(atob(e.data.hash).split(",")[0]);
+                    x.o.u.appendChild(document.createTextNode(atob(x.o.v)));
+                    x.o.s.src = atob(e.data.hash).split(",")[1];
+                    x.o.s.addEventListener("load", () => x = load(Object.assign(x, { op: { ["47"]: new hash47, ["52"]: new hash52, ["53"]: new hash53, ["57"]: new hash57, ["64"]: new hash64 } })));
+                    x.o.s = { svg: e.data.svg, tag: atob(e.data.hash).split(",")[2] };
+                }
+            } catch (error) {}
+        }
+    },
+    load = (d) => {
+        for (let i = 0, j = `enwrap,ensha,hash208,hash104,hash214,hash107,hash228,hash114,hash256,hash128`.split(","); i < j.length; i++)
+            _ez[j[i]]({s:"",text:"",dataurl:""});
+        x._yz.start.passed = !0;
+        return d;
+    };
+    window.x = { _yz: { start: {} }};
+    window.addEventListener("message", windowEvent);
+</script>
