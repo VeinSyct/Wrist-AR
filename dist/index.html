@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+        <title>Wrist Demo</title>
+        <link rel="shortcut icon" type="image/ico" href="assets/images/favicon.png" />
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                user-select: none;
+            }
+            html,
+            body {
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+                background: transparent;
+                background-color:black;
+            }
+            img{
+                -webkit-user-drag:none;
+                -khtml-user-drag:none;
+                -moz-user-drag:none;
+                -o-user-drag:none;
+                user-drag:none;
+            }
+            input,
+            textarea,
+            button,
+            select,
+            span,
+            div,
+            img,
+            a{
+                -webkit-tap-highlight-color:transparent;
+            }
+            .brand-logo {
+                height: 42px;
+                background: rgb(55 65 81 / 1);
+                -webkit-mask: url("assets/images/360 logo.webp") center/contain;
+            }
+            .brand-logo img {
+                height: 42px;
+                opacity: 0;
+            }
+            .toast-indicator {
+                display: none;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
+                pointer-events: none;
+            }
+            .toast-indicator > div {
+                padding: 6px 24px;
+                position: absolute;
+                display: flex;
+                flex-direction: row;
+                background: #0007;
+                border-radius: 24px;
+            }
+            .toast-indicator > div > img {
+                margin: 0;
+                margin-right: 12px;
+                width: 28px;
+                color: transparent;
+            }
+            .toast-indicator > div > p {
+                margin: 0;
+                margin-top: 0px;
+                font-size: 18px;
+            }
+            .tool-buttons {
+                position: absolute;
+                width: 42px;
+                height: 42px;
+                border: 0px;
+                padding: 0px;
+                /* outline: 2.4px dashed #fff9; */
+                background: radial-gradient(#000c, #3e3f46aa);
+                border-radius: 50%;
+                box-shadow:
+                    1px 2px 1px 1px rgba(255, 255, 255, .3) inset,
+                    1px -2px 1px 1px rgba(0, 0, 0, .3) inset,
+                    2px 4px 1px 2px rgba(255, 255, 255, .3) inset,
+                    2px -4px 1px 2px rgba(0, 0, 0, .3) inset,
+                    0 4px 3px -2px rgba(0, 0, 0, .4),
+                    2px 7px 2px -2px rgba(17, 17, 17, .4),
+                    4px 8px 2px -2px rgba(17, 17, 17, .4),
+                    5px 10px 8px -6px rgba(17, 51, 85, .4),
+                    7px 16px 16px -16px black;
+                border-top: .064em dashed #fadc88;
+                border-left: .064em dashed #9c7625;
+                border-right: .064em dashed #9c7625;
+                border-bottom: .064em dashed #9c7625;
+                cursor: pointer;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+            }
+            .tool-buttons > img {
+                width: 100%;
+                height: 100%;
+                pointer-events: none
+            }
+            .tool-buttons:hover {
+                background: radial-gradient(#000c, #3e3f46aa);
+                border-top: .031em solid #fadc88;
+                border-left: .031em solid #9c7625;
+                border-right: .031em solid #9c7625;
+                border-bottom: .031em solid #9c7625;
+            }
+            .tool-buttons:active {
+                background: radial-gradient(#333c, #3e3f46aa);
+            }
+        </style>
+        <!-- PRELOAD IFRAME -->
+        <script>
+            e = document.createElement("div");
+            e.style.pointerEvents = "none";
+            e.style.willChange = "transform";
+            e.innerHTML = `<iframe src="interface.html" style="position: absolute; width: 100%; height: 100%; left: 0; top: 0; overflow: hidden" frameBorder="0"></iframe>`;
+            iframe = e.firstChild;
+            e = undefined;
+        </script>
+    </head>
+    <body>
+        <div id="three-cont" style="display: flex; justify-content: center; align-items: center">
+            <div id="three-iframe-cont" style="display: none; overflow: hidden; pointer-events: none; will-change: opacity"></div>
+            <div id="three-canvas" style="position: absolute; display: flex; top: 0; mix-blend-mode: screen; pointer-events: none"></div>
+            <button class="tool-buttons" type="button" onclick="iframe.contentWindow.postMessage({ action: 'switch-camera' })" style="left: 14px; bottom: 96px">
+                <img src="assets/images/switch camera.webp"/>
+            </button>
+            <button class="tool-buttons" type="button" onclick="iframe.contentWindow.postMessage({ action: 'download-render' })" style="left: 14px; bottom: 24px">
+                <img src="assets/images/download.webp"/>
+            </button>
+            <button class="tool-buttons" type="button" onclick="showMeasurement({ show: !0 })" style="left: 76px; bottom: 24px">
+                <img src="assets/images/measure.webp"/>
+            </button>
+            <button class="tool-buttons" type="button" onclick="switchWristWatch()" style="right: 76px; bottom: 24px">
+                <img src="assets/images/back.webp"/>
+                <p id="status-message1"></p>
+            </button>
+            <button class="tool-buttons" type="button" onclick="switchWristWatch(!0)" style="right: 14px; bottom: 24px">
+                <img src="assets/images/next.webp"/>
+                <p id="status-message2"></p>
+            </button>
+            <div style="position: absolute; top: 12px; pointer-events: none;">
+                <div class="brand-logo">
+                    <img src="assets/images/360 logo.webp"/>
+                </div>
+                <canvas id="three-buffer" hidden></canvas>
+            </div>
+            <div class="toast-indicator">
+                <div>
+                    <img alt="" src="assets/images/warning.webp" />
+                    <p style="color: white; white-space: nowrap; font-size: large">Network/Connection takes too long</p>
+                </div>
+            </div>
+            <div id="camera-frame-cont" style="pointer-events: none"></div>
+        </div>
+        <div id="sizing-cont" style="display: none; width: 100%; height: 100vh; background: #171717">
+            <div id="wrist-slider-area" style="position: absolute; display: flex; justify-content: center; align-items: center; left: 0px; width: 100%; border-top: 6px solid yellow; background-color: #9992">
+                <img src="assets/images/wrist left.webp" style="height: calc(100% - 5px); width: 100%; pointer-events: none">
+                <p id="wrist-slider-size" style="position: absolute; color: white; font-size: 42px; font-weight: 500"></p>
+            </div>
+            <div id="wrist-slider" style="position: absolute; width: 100%; display: flex; flex-direction: column; align-items: center; height: 40px">
+                <div style="width: 100%; height: 0px; border-bottom: 6px solid blue;"></div>
+                <div id="wrist-slider-handle" style="margin-top: -3px; height: 100%; width: 86%; display: flex; justify-content: center; align-items: center; cursor: move; background-color: blue; border-radius: 0px 0px 9px 9px; border: none">
+                    <img src="assets/images/updown.webp" draggable="false" style="height: 70%; pointer-events: none">
+                </div>
+            </div>
+            <button class="tool-buttons" type="button" onclick="sizingButton({ index: 0 }); delete _reg.manual" style="left: 14px; bottom: 24px">
+                <img src="assets/images/back.webp"/>
+            </button>
+            <button class="tool-buttons" type="button" onclick="sizingButton({ index: 1 })" style="left: 76px; bottom: 24px">
+                <img src="assets/images/hand right.webp"/>
+            </button>
+            <button class="tool-buttons" type="button" onclick="sizingButton({ index: 2 }); _reg.manual = !0" style="right: 14px; bottom: 24px">
+                <img src="assets/images/check.webp"/>
+            </button>
+        </div>
+        <script>
+            let dragElement = (elmnt) => {
+                let dragMouseDown = (e) => {
+                    _reg.prevY = e.touches ? e.touches[0].clientY : e.clientY;
+                    document.onmouseup = document.ontouchend = closeDragElement;
+                    document.onmousemove = document.ontouchmove = elementDrag;
+                },
+                elementDrag = (e) => {
+                    _reg.currY = _reg.prevY - (e.touches ? e.touches[0].clientY : e.clientY);
+                    _reg.prevY = e.touches ? e.touches[0].clientY : e.clientY;
+                    elmnt.style.top = `${elmnt.offsetTop - _reg.currY}px`;
+                    document.getElementById(elmnt.id + "-area").style.height = `${elmnt.offsetTop - _reg.currY + _reg.deftY}px`;
+                    document.getElementById("wrist-slider-size").innerHTML = `${(_reg.prevY * _reg.ratio).toFixed(1)} mm`;
+                },
+                closeDragElement = () => {
+                    document.onmouseup = document.ontouchend = document.onmousemove = document.ontouchmove = null;
+                };
+                _reg.prevY = _reg.deftY = !_reg.touch ? 460 : window.innerWidth > window.innerHeight ? 300 : 420;
+                _reg.ratio = _reg.touch ? .133 : .13;
+                document.getElementById(elmnt.id + "-handle").onmousedown = document.getElementById(elmnt.id + "-handle").ontouchstart = dragMouseDown;
+                elmnt.style.transform = `translate(0px, ${_reg.deftY}px)`;
+                document.getElementById(elmnt.id + "-area").style.height = `${_reg.deftY}px`;
+            },
+            sizingButton = (d) => {
+                if (d.index == 0) showMeasurement({ show: !1 });
+                if (d.index == 1) {
+                    d.e = document.getElementsByTagName("button")[5].getElementsByTagName("img")[0];
+                    d.f = document.getElementById("wrist-slider-area").getElementsByTagName("img")[0];
+                    d.e.src = `assets/images/hand ${d.e.src.includes("left") ? "right" : "left"}.webp`;
+                    d.f.src = `assets/images/wrist ${d.e.src.includes("left") ? "right" : "left"}.webp`;
+                };
+                if (d.index == 2) {
+                    for (let k in _reg.sizes)
+                        if (!d.size && _reg.prevY * _reg.ratio > _reg.sizes[k])
+                            d.size = k;
+                    if (d.size != _reg.size && iframe)
+                        iframe.contentWindow.postMessage({ action: "model-size", size: _reg.size = d.size });
+                    showMeasurement({ show: !1 })
+                };
+            },
+            showMeasurement = (d) => {
+                document.getElementById("three-cont").style.display = d.show ? "none" : "flex";
+                document.getElementById("sizing-cont").style.display = d.show ? "flex" : "none";
+            },
+            _reg = {
+                currY: 0,
+                touch: window.matchMedia("(any-hover: none)").matches,
+                mobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+                sizes: {
+                    large: 62,
+                    normal: 42,
+                    small: 0,
+                },
+                size: "normal"
+            },
+            isHash = (d) => {
+                iframe.contentWindow.postMessage({ action: "hash-changed", hash: location.href.split("#").pop() });
+            };
+            window.addEventListener("hashchange", () => {
+                isHash({});
+            });
+            dragElement(document.getElementById("wrist-slider"));
+        </script>
+        <script>
+            window.addEventListener("message", (e) => {
+                if (e.data.action == "wrist-started") {
+                    document.getElementById("pose-video").style.display = "none";
+                    document.querySelector(".toast-indicator").style.display = "none";
+                    setTimeout(() => delete _reg.sizing, _reg.mobile ? 1024 : 512);
+                }
+                if (e.data.action == "feed-started") {
+                    document.getElementById("three-canvas").style.mixBlendMode = "normal";
+                    document.querySelector(".toast-indicator").style.display = "none";
+                    setTimeout(() => isHash({}), _reg.mobile ? 1024 : 512)
+                }
+                if (e.data.action == "feed-halted") {
+                    document.getElementById("pose-video").style.display = "block";
+                    document.getElementById("three-canvas").style.mixBlendMode = "screen";
+                }
+                if (e.data.action == "main-reload") location.reload();
+            });
+            async function switchWristWatch(n) {
+                if (!_reg.sizing && document.getElementById("pose-video").style.display == "none") {
+                    _reg.sizing = !0;
+                    iframe.contentWindow.postMessage({ action: "switch-model", next: n });
+                } else setTimeout(() => switchWristWatch(n), 214);
+            };
+            setTimeout(() => {
+                if (document.getElementById("pose-video").style.display != "none") document.querySelector(".toast-indicator").style.display = "flex";
+                iframe.contentWindow.postMessage({ action: "revive-model" });
+            }, 16384);
+        </script>
+        <script>
+            document.getElementById("three-iframe-cont").appendChild(iframe);
+            document.addEventListener("DOMContentLoaded", function () {
+                loader.hand = loader.hand ? loader.hand : {};
+                let d = _getTrackSettings();
+                document.getElementById(d.canvas).appendChild(createLayers({ webcam: d.webcam, handmarkers: d.handmarkers, width: d.width, height: d.height }));
+                d.wCam = document.querySelector("#" + d.webcam);
+                d.hMarkers = document.querySelector("#" + d.handmarkers);
+                initCamera({ wCam: d.wCam, hMarkers: d.hMarkers, mobile: window.matchMedia("(any-hover: none)").matches, fps: d.fps })
+                    .then((stream) => {
+                        if (stream) {
+                            stream.play();
+                            stream.addEventListener("loadeddata", () => {});
+                        }
+                    })
+                    .catch(function (error) {
+                        alert("Could not access camera");
+                    });
+                onWindowResize(d);
+            });
+            let loader = {};
+            let _getTrackSettings = () => {
+                return{
+                    canvas: "three-canvas",
+                    webcam: "pose-video",
+                    handmarkers: "pose-canvas",
+                    width: window.outerWidth,
+                    height: window.outerHeight,
+                    fps: 30,
+                    hands: 1,
+                    solutions: "./tensorflow/hands/solutions/",
+                }
+            }
+            let onWindowResize = (d) => {
+                document.getElementById("camera-frame-cont").innerHTML = `
+                    <div style="position: absolute; display: flex; justify-content: center; align-items: center; width: 100%;; height: 100%; left: 0; top: 0; opacity: .42">
+                        <div style="position: absolute; width: 80v${window.innerWidth > window.innerHeight ? "h" : "w"}; height: 80v${window.innerWidth > window.innerHeight ? "h" : "w"};">
+                            <span style="position: absolute; border-style: solid none none solid; border-color: white; left: 0; top: 0px; border-width: 2px; width: 24%;height: 24%"></span>
+                            <span style="position: absolute; border-style: solid solid none none; border-color: white; right: 0; top: 0px; border-width: 2px; width: 24%;height: 24%"></span>
+                            <span style="position: absolute; border-style: none none solid solid; border-color: white; left: 0; bottom: 0px; border-width: 2px; width: 24%; height: 24%"></span>
+                            <span style="position: absolute; border-style: none solid solid none; border-color: white; right: 0; bottom: 0px; border-width: 2px; width: 24%; height: 24%"></span>
+                        </div>
+                    </div>`;
+            };
+            window.addEventListener("resize", () => onWindowResize({}));
+            let createLayers = (d) => {
+                d.wh = window.matchMedia("(any-hover: none)").matches ? "110%" : "100%";
+                d.e = document.createElement("div");
+                d.e.innerHTML =
+                    `<span style="display:flex;justify-content:center;align-items:center;width:100vw;height:100vh">
+                        <video id="` +
+                    d.webcam +
+                    `" playsinline style="position:absolute;width:${d.wh};height:${d.wh};object-fit:cover"></video>
+                        <canvas id="` +
+                    d.handmarkers +
+                    `" style="position:absolute;width:${d.wh};height:${d.wh};object-fit:cover;transform:scaleX(-1);opacity:.24"></canvas>
+                    </span>`;
+                return d.e.firstChild;
+            };
+            let initCamera = async (d) => {
+                try {
+                    if (d.wCam.srcObject) d.wCam.srcObject.getVideoTracks()[0].stop();
+                    d.wCam.srcObject = await navigator.mediaDevices.getUserMedia({ audio: !1, video: { facingMode: "environment", frameRate: { max: d.fps } } });
+                    document.getElementById("three-iframe-cont").style.display = "flex";
+                    for (let i = 0, j = ["width", "height"]; i < j.length; i++) d.hMarkers[j[i]] = d.wCam[j[i]] = d.wCam.srcObject.getVideoTracks()[0].getSettings()[j[i]];
+                    return new Promise((resolve) => {
+                        d.wCam.onloadedmetadata = () => {
+                            resolve(d.wCam);
+                        };
+                    });
+                } catch (error) {
+                    alert("Could not access camera");
+                }
+            };
+        </script>
+    </body>
+</html>
